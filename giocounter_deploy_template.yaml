@@ -1,0 +1,68 @@
+version: '3.7'
+services:
+  pg-0:
+    image: docker.io/bitnami/postgresql-repmgr:11
+    ports:
+      - "12345:12345"
+    volumes:
+      - pg_main:/bitnami/postgresql
+    env_file:
+      - pg-secrets.env
+    environment:
+      - POSTGRESQL_DATABASE=dbname
+      - REPMGR_PRIMARY_HOST=pg-0
+      - REPMGR_PRIMARY_PORT=12345
+      - REPMGR_PARTNER_NODES=pg-0,pg-1:12345
+      - REPMGR_NODE_NAME=pg-0
+      - REPMGR_NODE_NETWORK_NAME=pg-0
+      - REPMGR_PORT_NUMBER=12345
+
+  pg-1:
+    image: docker.io/bitnami/postgresql-repmgr:11
+    volumes:
+      - pg_backp:/bitnami/postgresql
+    env_file:
+      - pg-secrets.env
+    environment:
+      - POSTGRESQL_DATABASE=dbname
+      - REPMGR_PRIMARY_HOST=pg-0
+      - REPMGR_PRIMARY_PORT=12345
+      - REPMGR_PARTNER_NODES=pg-0,pg-1:12345
+      - REPMGR_NODE_NAME=pg-1
+      - REPMGR_NODE_NETWORK_NAME=pg-1
+      - REPMGR_PORT_NUMBER=12345
+
+  collector:
+    image: collector
+    deploy:
+      restart_policy:
+        condition: any
+#      mode: global
+    env_file:
+      - collector-secrets.env
+    environment:
+      - DB_SERVER_ADDR=pg-0
+#      - DEBUG=True
+    ports:
+      - "12345:12345"
+    volumes:
+      - _usr_db:/user_db
+
+  haproxy:
+    image: gio_haproxy
+    ports:
+      - "12345:12345"
+      - "12345:12345"
+      - "12345:12345"
+      - "12345:12345"
+      - "12345:12345"
+      - "12345:12345"
+      - "12345:12345"
+
+volumes:
+  pg_main:
+    driver: local
+  pg_backp:
+    driver: local
+  _usr_db:
+    driver: local

@@ -1,0 +1,13 @@
+{% extends "mid_navbar.html" %}
+
+{% block content %}
+{{ super() }}
+
+    {% if is_enable %}
+    <div style="text-align: center; color: green;"><h4 class="display-5">Email reception Enabled</h4></div>
+    {% else %}
+    <div style="text-align: center; color: red;"><h4 class="display-5">Email reception Disabled</h4></div>
+    {% endif %}
+    <div style="text-align: center;"><h4 class="display-5">for {{ current_user.username }}</h4></div>
+
+{% endblock %}

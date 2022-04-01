@@ -1,0 +1,42 @@
+{% extends "mid_navbar.html" %}
+
+{% block content %}
+{{ super() }}
+    <script src="{{ url_for('static', filename='status_refresh.js') }}"></script>
+    <script>
+        $(document).ready( function () {
+            setup_update_receiver();
+            }
+        );
+    </script>
+    <div class="row justify-content-center" aria-live="polite" aria-atomic="true" style="text-align: center; margin: auto;">
+        <h2 id="countingDiv" class="display-6" style="margin: 1%;">People Counting:</h2>
+        <div class="justify-content-center">
+            <table class="table table-dark table-bordered table-sm" style="white-space: nowrap; width: 1%; margin: auto;">
+                <tr>
+                    <th class="healthval" scope="col">Entered</th>
+                    <th class="healthval" scope="col">Out</th>
+                    <th  class="healthval healthval-tot" scope="col">Estimated People </th>
+                </tr>
+                <tr>
+                    <td class="healthval" id="person_in">-1</td>
+                    <td class="healthval" id="person_out">-1</td>
+                    <td class="healthval healthval-tot" id="person_tot">-1</td>
+                </tr>
+            </table>
+        </div>
+        <h2 id="countingDiv-08-20" class="display-6" style="margin: 1%;">
+            {% if config['NOW_TIMERANGE'][0] == config['NOW_TIMERANGE'][1] %}
+                24h
+            {% else %}
+                ({{ config['NOW_TIMERANGE'][0] }}h - {{ config['NOW_TIMERANGE'][0] }}h)
+            {% endif %}
+        </h2>
+    </div>
+    <div style="text-align: center;">
+        <a href="/">
+            <img src="/videogate/local/{{ device }}" width="70%" alt="NO VIDEO from Gate {{ device }}">
+        </a>
+    </div>
+
+{% endblock %}

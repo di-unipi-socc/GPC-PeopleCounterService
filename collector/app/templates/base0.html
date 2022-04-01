@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GIÒ</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% block styles %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
+    {% endblock %}
+
+    <script>const CURRENT_USER = "{{ current_user.username }}"; </script>
+    <script>console.log("current user is:" + CURRENT_USER); </script>
+
+</head>
+<body class="container-fluid p-0 my-1 bg-dark text-white">
+    <div class="w-25" style="position: absolute; top: 0; right: 0;">
+        <div id="toastHook" aria-live="polite" aria-atomic="true"></div>
+    </div>
+    <div class="position-absolute" style="right: 0;top: 0; color: red;">{{ current_user.username }}</div>
+
+    <div style="text-align: center;"><h1 class="display-4">GIÒ People Counter</h1></div>
+
+    {% block script %} {% endblock %}
+    {% block content %} {% endblock %}
+
+</body>
+</html>

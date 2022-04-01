@@ -1,0 +1,9 @@
+{% extends "mid_navbar.html" %}
+
+{% block content %}
+{{ super() }}
+
+    <div style="text-align: center; color: red;"><h1 class="display-4">UNAUTHORIZED ACCESS</h1></div>
+    <div style="text-align: center; color: red;"><h1 class="display-4">as {{ current_user.username }}</h1></div>
+
+{% endblock %}

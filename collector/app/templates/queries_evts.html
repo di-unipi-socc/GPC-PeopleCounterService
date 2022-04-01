@@ -1,0 +1,58 @@
+{% extends "mid_navbar.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+People Estimated
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
+{% endblock %}
+
+{% block content %}
+    {{super()}}
+
+    <div class="container flex-md-wrap" style="wrap-option: content">
+    <div class="row">
+        <form class="form-control-range" method="POST" action="/qry_form_evt">
+            <h3 class="label">Time-Range: Enter/Exits Events</h3>
+            <table  class="table table-dark table-borderless table-sm">
+                <tr>
+                    <th scope="col">{{ wtf.form_field(form.device, list="dev_list") }}</th>
+                    <th scope="col">{{ wtf.form_field(form.per_gate) }}</th>
+                </tr>
+                <tr>
+                    <th scope="col">{{ wtf.form_field(form.time1, type="datetime-local") }}</th>
+                    <th scope="col">{{ wtf.form_field(form.time2, type="datetime-local") }}</th>
+                </tr>
+            </table>
+            {{ form.hidden_tag() }}
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Get Events</button>
+        </form>
+    </div>
+    <div class="row">
+        {% if msg != '' %}
+            <div><h3 class="text-capitalize">{{ msg }}</h3></div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <ul id="navigation">
+        {% for item in evt_ls %}
+            <li> {{ item }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    </div>
+
+    <datalist id="dev_list">
+        <option value="all">
+        {% if dev_ls is defined %}
+            {% for item in dev_ls %}
+                <option value={{ item }}>
+            {% endfor %}
+        {% endif %}
+        <option value="RESET">
+    </datalist>
+
+{% endblock %}

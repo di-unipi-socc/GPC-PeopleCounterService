@@ -1,0 +1,61 @@
+{% extends "mid_navbar.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+{{ super() }}
+
+    {% if current_user.username in config['MANAGE_USERS_ENABLE'] %}
+        <div class="container flex-md-wrap" style="wrap-option: content">
+            <div class="row">
+                <form class="form-control-range" method="POST" action="/user_management">
+                    <h3 class="label">Modify User Email Address or Passwords</h3>
+                    <table  class="table table-dark table-borderless table-sm">
+                        <tr>
+                            <th scope="col">{{ wtf.form_field(form.username, list="user_list") }}</th>
+                            <th scope="col">{{ wtf.form_field(form.email) }}</th>
+                        </tr>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">{{ wtf.form_field(form.password) }}</th>
+                        </tr>
+                    </table>
+                    {{ form.hidden_tag() }}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Set Mail Address / Password</button>
+                </form>
+            </div>
+            <div class="row">
+                {% if msg != '' %}
+                    <div><h3 class="text-info">{{ msg }}</h3></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="justify-content-center" aria-live="polite" aria-atomic="true" style="text-align: center; margin: auto;">
+            <h2 class="display-6" style="margin: 1%;">Users Email</h2>
+            <div class="justify-content-center">
+                <table class="table table-dark table-bordered table-sm" style="white-space: nowrap; width: 1%; margin: auto;">
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Email</th>
+                    </tr>
+                    {% for usr_email in usr_email_ls %}
+                    <tr>
+                        <td>{{ usr_email[0] }}</td>
+                        <td>{{ usr_email[1] }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+    <datalist id="user_list">
+        {% if usr_email_ls is defined %}
+            {% for usr_email in usr_email_ls %}
+                <option value={{ usr_email[0] }}>
+            {% endfor %}
+        {% endif %}
+    </datalist>
+
+{% endblock %}

@@ -1,0 +1,100 @@
+ {% extends "base0.html" %}
+
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for(".static", filename="dashboard.css")}}">
+{% endblock %}
+
+ {% block content %}
+     <script src="{{ url_for('static', filename='ports_conf.js') }}"></script>
+     <script src="{{ url_for('static', filename='msg_utils.js') }}"></script>
+     <script>
+        $(document).ready( function () {
+            setup_msg_receiver();
+            }
+        );
+     </script>
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Dashboard <span class="sr-only">(current)</span></a>
+          </li>
+
+
+            {% if current_user.username in config['VIDEO_ENABLE'] %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Gate Cameras
+                    </a>
+                    <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+                        {% for src in config['VIDEO_SRCS'].get_streamers() %}
+                            <a class="dropdown-item" href="/cam_view/{{ src }}">{{ src }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+            {% endif %}
+
+        {% if current_user.username in config['QRY_CNT_ENABLE'] %}
+          <li class="nav-item">
+            <a class="nav-link" href="/qry_form_num">Gates Estimations</a>
+          </li>
+        {% endif %}
+
+        {% if current_user.username in config['QRY_EVT_ENABLE'] %}
+          <li class="nav-item">
+            <a class="nav-link" href="/qry_form_evt">Gates Events</a>
+          </li>
+        {% endif %}
+
+        {% if current_user.username in config['RESET_ENABLE'] %}
+        <li class="nav-item">
+            <a class="nav-link" href="/reset_form">Reset Counters</a>
+          </li>
+        {% endif %}
+
+        {% if current_user.username in config['QRY_DEV_ENABLE'] %}
+        <li class="nav-item">
+            <a class="nav-link" href="/qry_form_dev_evt">Device Status Events</a>
+          </li>
+        {% endif %}
+
+        {% if current_user.username in config['CLOSE_DAYS_ENABLE'] %}
+        <li class="nav-item">
+            <a class="nav-link" href="/close_days_form">Closing-Days</a>
+          </li>
+        {% endif %}
+
+        {% if current_user.username in config['EMAIL_USER_ENABLE'] %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Email
+                    </a>
+                    <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/email/status">Current Setting</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/email/on">Enable</a>
+                        <a class="dropdown-item" href="/email/off">Disable</a>
+                    </div>
+                </li>
+            {% endif %}
+
+        {% if current_user.username in config['MANAGE_USERS_ENABLE'] %}
+        <li class="nav-item">
+            <a class="nav-link" href="/user_management">Manage Users</a>
+          </li>
+        {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+ {% endblock %}
